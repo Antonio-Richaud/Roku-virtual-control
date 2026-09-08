@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CONFIG="${ROKU_CONFIG:-$ROOT_DIR/config/roku-remote.env}"
+
+if [ ! -f "$CONFIG" ]; then
+  echo "Missing config: $CONFIG" >&2
+  echo "Copy config/roku-remote.env.example to config/roku-remote.env and edit it." >&2
+  exit 2
+fi
+
+# shellcheck disable=SC1090
+source "$CONFIG"
+
+: "${ROKU_LOCAL_IP:?ROKU_LOCAL_IP is required}"
+: "${ROKU_IP:?ROKU_IP is required}"
+
+if [ "$#" -eq 0 ]; then
+  cat <<'EOF'
+Usage examples:
+  ./scripts/roku-send w
+  ./scripts/roku-send s
+  ./scripts/roku-send a d e
+  ./scripts/roku-send q
+  ./scripts/roku-send 'text:Hello Roku'
+  ./scripts/roku-send w 'wait:1' e
+
+Aliases:
+  w/up       Up
+  s/down     Down
+  a/left     Left
+  d/right    Right
+  e/select   Select
+  q/back     Back
+  h/home     Home
+EOF
+  exit 0
+fi
+
+exec python3 \
+  "$ROOT_DIR/scripts/roku-8080-controller.py" \
+  "$ROKU_LOCAL_IP" \
+  "$ROKU_IP" \
+  "$@"
