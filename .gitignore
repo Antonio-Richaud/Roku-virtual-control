@@ -1,0 +1,41 @@
+# Secrets and runtime credentials
+*.key
+*.pem
+*.psk
+*.pmk
+*.secret
+.env
+.env.*
+!.env.example
+/etc/roku-remote-wpa.conf
+roku-remote-wpa.conf
+*cred*.json
+*credential*.json
+
+# Packet captures and raw network traces
+*.pcap
+*.pcapng
+*.cap
+
+# Logs and generated output
+*.log
+*.txt
+/run/
+/tmp/
+logs/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local configuration
+config/roku-remote.env
+config/local.*
